@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.repository.MessageRepository;
 import com.example.repository.AccountRepository;
 import com.example.entity.Message;
+import com.example.entity.Account;
 
 @Service
 public class MessageService {
@@ -24,7 +25,8 @@ public class MessageService {
 
     //create new message
     public Message createNewMessage(Message message){
-        if(message.getMessageText() != "" && message.getMessageText() != null && message.getMessageText().length() < 255 && accountRepository.findById(message.getPostedBy()).isPresent()){
+        Optional<Account> existingAccount = accountRepository.findById(message.getPostedBy());
+        if(message.getMessageText() != "" && message.getMessageText() != null && message.getMessageText().length() < 255 && existingAccount.isPresent()){
             return messageRepository.save(message);
         } else {
             return null;
